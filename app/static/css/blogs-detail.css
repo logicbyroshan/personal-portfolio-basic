@@ -4,7 +4,7 @@
     gap: 20px;
     align-items: start;
     background-color: var(--main-bg-color-1);
-    padding: 20px;
+    margin-right: 20px;
   }
   
   .blog-side-card {
@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    margin-left: 20px;
     border-radius: 10px;
     color: white;
     gap: 30px;

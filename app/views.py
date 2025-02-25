@@ -1,33 +1,45 @@
+from django.shortcuts import render, redirect, get_object_or_404  # Fix here
 from .models import Project, Blog, Skill, Experience, FAQ
 from django.db.models import Q
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ContactForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+import logging
 
-@csrf_exempt  # Temporarily disable CSRF for testing (secure it later)
+logger = logging.getLogger(__name__)
+
+@csrf_exempt  # Temporarily disable CSRF for testing (remove later)
 def contact_view(request):
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
         message = request.POST.get("message")
 
-        if name and email and message:
-            try:
-                send_mail(
-                    subject=f"New Contact Form Submission from {name}",
-                    message=f"Sender: {name}\nEmail: {email}\nMessage: {message}",
-                    from_email="contact@roshandamor.site",  # Update to match your settings
-                    recipient_list=["contact@roshandamor.site"],  # Replace with your email
-                    fail_silently=False,
-                )
-                return JsonResponse({"success": True})
-            except Exception as e:
-                return JsonResponse({"success": False, "error": str(e)})
+        # Debugging: Log received data
+        logger.info(f"Received data: Name={name}, Email={email}, Message={message}")
 
-    return JsonResponse({"success": False})
+        if not all([name, email, message]):
+            logger.error("Form data missing")
+            return JsonResponse({"success": False, "error": "Missing fields"}, status=400)
+
+        try:
+            send_mail(
+                subject=f"New Contact Form Submission from {name}",
+                message=f"Sender: {name}\nEmail: {email}\nMessage: {message}",
+                from_email="contact@roshandamor.site",
+                recipient_list=["contact@roshandamor.site"],
+                fail_silently=False,
+            )
+            logger.info("Email sent successfully")
+            return JsonResponse({"success": True})
+        except Exception as e:
+            logger.error(f"Email sending failed: {e}")
+            return JsonResponse({"success": False, "error": str(e)}, status=500)
+
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
 
 
 def get_unique_categories(queryset, field_name):
