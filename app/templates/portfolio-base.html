@@ -56,12 +56,12 @@
                 <a href="{% url 'home' %}#contact">Contact</a>
             </div>
 
-            <!-- Updated Resume Button Section -->
+                        <!-- Resume Download Button -->
             <div class="nav-btns">
-                <a href="#" class="outline-btn">Download Resume</a>
+                <button class="outline-btn" onclick="showPopup()">Download Resume</button>
             </div>
         </div>
-
+        
         {% block content %}
         {% endblock %}
     
@@ -148,6 +148,14 @@
 
     <script src="{% static 'js/index.js' %}"></script>
     <script src="{% static 'js/contact.js' %}"></script>
+    <script>
+        function showPopup() {
+            document.getElementById("popup").style.display = "block";
+        }
 
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+    </script>
 </body>
 </html>

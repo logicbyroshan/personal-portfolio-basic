@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views import (
     home, project_list, project_detail, blog_list, blog_detail, 
-    skill_list, experience_list, faq_list, contact_view
+    skill_list, experience_list, faq_list, contact_view, get_resume, download_resume
 )
 
 urlpatterns = [
@@ -28,6 +28,9 @@ urlpatterns = [
 
     # Contact Form
     path("contact/", contact_view, name="contact"),
+
+    path("resume/", get_resume, name="resume"),
+    path("resume/download/", download_resume, name="download_resume"),
 ]
 
 if settings.DEBUG:

@@ -1,3 +1,10 @@
+function showPopup() {
+  document.getElementById("resumePopup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("resumePopup").style.display = "none";
+}
 
 //Navbar toggle
 document.addEventListener("DOMContentLoaded", function () {
@@ -161,29 +168,37 @@ function toggleCategory(element) {
       });
   });
   
-    
-// FAQ section
+
 document.addEventListener("DOMContentLoaded", () => {
-  const faqCards = document.querySelectorAll(".faq-card");
+    const faqCards = document.querySelectorAll(".faq-card");
 
-  faqCards.forEach((card) => {
-      const answer = card.querySelector(".answer");
-      const toggleIcon = card.querySelector(".faq-toggle");
+    faqCards.forEach((card) => {
+        const answer = card.querySelector(".answer");
+        const toggleIcon = card.querySelector(".faq-toggle");
 
-      toggleIcon.addEventListener("click", () => {
-          // Toggle answer visibility
-          if (answer.style.display === "none" || !answer.style.display) {
-              answer.style.display = "block"; // Show the answer
-              toggleIcon.src = "../images/icons/close.png"; // Change to "hide" icon
-              toggleIcon.alt = "Hide FAQ";
-          } else {
-              answer.style.display = "none"; // Hide the answer
-              toggleIcon.src = "../images/icons/open.png"; // Change to "show" icon
-              toggleIcon.alt = "Show FAQ";
-          }
-      });
-  });
+        // Get static paths from the data attributes
+        const openIcon = toggleIcon.dataset.closedIcon;
+        const closeIcon = toggleIcon.dataset.openIcon;
+
+        console.log("Open Icon Path:", openIcon);  // Debugging
+        console.log("Close Icon Path:", closeIcon);  // Debugging
+
+        toggleIcon.addEventListener("click", () => {
+            if (answer.style.display === "none" || !answer.style.display) {
+                answer.style.display = "block";
+                toggleIcon.src = closeIcon;
+                toggleIcon.alt = "Hide FAQ";
+            } else {
+                answer.style.display = "none";
+                toggleIcon.src = openIcon;
+                toggleIcon.alt = "Show FAQ";
+            }
+        });
+    });
 });
+
+
+
 
   //Progreess skill bar
   document.addEventListener("DOMContentLoaded", () => {

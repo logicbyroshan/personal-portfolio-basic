@@ -2,6 +2,14 @@ from django.db import models
 from django.utils.text import slugify
 import math
 import datetime
+from tinymce.models import HTMLField
+
+class Resume(models.Model):
+    file = models.FileField(upload_to="resumes/")
+    uploaded_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Resume ({self.uploaded_at.strftime('%Y-%m-%d %H:%M')})"
 
 # Project Model
 class Project(models.Model):
@@ -66,10 +74,9 @@ class Learning(models.Model):
         return f"Learning for {self.project.title}"
 
 
-# Blog Model
 class Blog(models.Model):
     title = models.CharField(max_length=255)
-    content = models.TextField()
+    content = HTMLField()  # Now using TinyMCE for rich-text content
     image = models.ImageField(upload_to="blogs/")
     publication_date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)

@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404  # Fix here
-from .models import Project, Blog, Skill, Experience, FAQ
+from .models import Project, Blog, Skill, Experience, FAQ, Resume
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import ContactForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import FileResponse, HttpResponse
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +43,18 @@ def contact_view(request):
 
     return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
+
+# Create your views here.
+def get_resume(request):
+    latest_resume = Resume.objects.order_by("-uploaded_at").first()
+    return render(request, "resume_popup.html", {"resume": latest_resume})
+
+def download_resume(request):
+    latest_resume = Resume.objects.order_by("-uploaded_at").first()
+    if latest_resume:
+        response = FileResponse(latest_resume.file.open("rb"), as_attachment=True)
+        return response
+    return HttpResponse("No resume available", status=404)
 
 
 def get_unique_categories(queryset, field_name):

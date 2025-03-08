@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
 
 
 
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tinymce',
     'app',
 ]
 
@@ -80,7 +80,10 @@ WSGI_APPLICATION = 'myportfolio.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-        'default': dj_database_url.config(default='sqlite:///db.sqlite3')
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
@@ -118,7 +121,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
@@ -141,3 +144,14 @@ EMAIL_USE_TLS = False  # Do NOT use TLS (Only one of SSL/TLS should be True)
 EMAIL_HOST_USER = "contact@roshandamor.site"  # ✅ Use your actual email
 EMAIL_HOST_PASSWORD = "Roshan@1410"  # ✅ Use the correct email password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # ✅ Ensures default sender is correct
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 500,
+    'menubar': True,
+    'plugins': 'advlist autolink lists link charmap preview anchor',
+    'toolbar': 'undo redo | styleselect | bold italic | bullist numlist outdent indent | link',
+    'content_css': '../app/static/css/blogs-detail.css',  # Load your custom CSS
+    'valid_elements': '*[*]',  # Allow all elements & attributes
+    'forced_root_block': '',  # Prevents adding extra <p> tags
+}
