@@ -3,13 +3,25 @@ from django.utils.text import slugify
 import math
 import datetime
 from tinymce.models import HTMLField
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
+
+
+def validate_file_size(value):
+    limit = 5 * 1024 * 1024  # 5MB
+    if value.size > limit:
+        raise ValidationError("File size must be under 5MB.")
 
 class Resume(models.Model):
-    file = models.FileField(upload_to="resumes/")
+    file = models.FileField(
+        upload_to="resumes/",
+        validators=[
+            FileExtensionValidator(allowed_extensions=["pdf", "doc", "docx"]),
+            validate_file_size
+        ]
+    )
     uploaded_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"Resume ({self.uploaded_at.strftime('%Y-%m-%d %H:%M')})"
 
 # Project Model
 class Project(models.Model):

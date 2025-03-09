@@ -45,16 +45,29 @@ def contact_view(request):
 
 
 # Create your views here.
+def latest_resume(request):
+    latest_resume = Resume.objects.order_by("-uploaded_at").first()
+    return {"resume": latest_resume}
 def get_resume(request):
     latest_resume = Resume.objects.order_by("-uploaded_at").first()
-    return render(request, "resume_popup.html", {"resume": latest_resume})
+    if latest_resume:
+        return FileResponse(
+            latest_resume.file.open(),
+            content_type='application/pdf',
+            headers={'Content-Disposition': 'inline; filename="resume.pdf"'}
+        )
+    return HttpResponse("No resume found", status=404)
 
 def download_resume(request):
     latest_resume = Resume.objects.order_by("-uploaded_at").first()
-    if latest_resume:
-        response = FileResponse(latest_resume.file.open("rb"), as_attachment=True)
+    
+    if latest_resume and latest_resume.file:  # Ensure the file exists
+        latest_resume.file.open()  # Open file before passing to response
+        response = FileResponse(latest_resume.file, as_attachment=True, filename=latest_resume.file.name)
         return response
+
     return HttpResponse("No resume available", status=404)
+
 
 
 def get_unique_categories(queryset, field_name):

@@ -68,6 +68,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.context_processors.latest_resume',  # Add this line
+
             ],
         },
     },
@@ -155,3 +157,6 @@ TINYMCE_DEFAULT_CONFIG = {
     'valid_elements': '*[*]',  # Allow all elements & attributes
     'forced_root_block': '',  # Prevents adding extra <p> tags
 }
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_BROWSER_XSS_FILTER = True
