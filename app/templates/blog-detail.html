@@ -29,5 +29,42 @@
             {{ blog.content|safe }}
         </div>
     </div>
+        <!-- Blog Sidebar -->
+    <div class="blog-side-card">
+        <!-- Latest Blogs -->
+        <div class="blog-side-card1">
+            <h1 class="blog-side-title">Latest Blogs</h1>
+            <div class="latest-blogs">
+                {% for latest_blog in latest_blogs %}
+                    <div class="latest-blog">
+                        <h2>{{ forloop.counter|default:"0" }}</h2>
+                        <h1 class="blog-title">
+                            <a href="{% url 'blog_detail' slug=latest_blog.slug %}">{{ latest_blog.title }}</a>
+                        </h1>
+                    </div>
+                {% empty %}
+                    <p>No latest blogs available.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Similar Blogs -->
+        <div class="blog-side-card1">
+            <h1 class="blog-side-title">Similar Blogs</h1>
+            <div class="latest-blogs">
+                {% for similar_blog in similar_blogs %}
+                    <div class="latest-blog">
+                        <h2>{{ forloop.counter|default:"0" }}</h2>
+                        <h1 class="blog-title">
+                            <a href="{% url 'blog_detail' slug=similar_blog.slug %}">{{ similar_blog.title }}</a>
+                        </h1>
+                    </div>
+                {% empty %}
+                    <p>No similar blogs available.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

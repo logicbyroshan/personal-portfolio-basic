@@ -129,15 +129,45 @@ def home(request):
         "experience_categories": experience_categories,
     })
 
-
 def project_detail(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    return render(request, 'project-detail.html', {'project': project})
 
+    # Get categories as a list
+    category_list = project.get_category_list()
+
+    # Fetch similar projects (excluding current project)
+    similar_projects = Project.objects.filter(
+        categories__iregex=r'(' + '|'.join(category_list) + ')'
+    ).exclude(id=project.id)[:3]
+
+    # Fetch latest projects (excluding current project)
+    latest_projects = Project.objects.exclude(id=project.id).order_by('-created_at')[:3]
+
+    return render(request, 'project-detail.html', {
+        'project': project,
+        'similar_projects': similar_projects,
+        'latest_projects': latest_projects
+    })
 
 def blog_detail(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
-    return render(request, 'blog-detail.html', {'blog': blog})
+
+    # Get categories as a list
+    category_list = [cat.strip() for cat in blog.categories.split(",") if cat.strip()]
+
+    # Fetch similar blogs (excluding current blog)
+    similar_blogs = Blog.objects.filter(
+        categories__iregex=r'(' + '|'.join(category_list) + ')'
+    ).exclude(id=blog.id)[:3]
+
+    # Fetch latest blogs (excluding current blog)
+    latest_blogs = Blog.objects.exclude(id=blog.id).order_by('-created_at')[:3]
+
+    return render(request, 'blog-detail.html', {
+        'blog': blog,
+        'similar_blogs': similar_blogs,
+        'latest_blogs': latest_blogs
+    })
 
 
 # Project Views

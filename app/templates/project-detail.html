@@ -129,32 +129,47 @@
                 <div class="projects-suggestions-cards">
                     {% for similar_project in similar_projects %}
                         <div class="project-suggest">
-                            <img src="{{ similar_project.images.first.image.url }}" alt="">
+                            {% with similar_project.images.first as first_image %}
+                                {% if first_image %}
+                                    <img src="{{ first_image.image.url }}" alt="Project Image">
+                                {% else %}
+                                    <img src="{% static 'images/default-project.jpg' %}" alt="Default Image">
+                                {% endif %}
+                            {% endwith %}
                             <h2>{{ similar_project.title }}</h2>
+                            <a href="{% url 'project_detail' slug=similar_project.slug %}">View Project</a>
                         </div>
+                    {% empty %}
+                        <p>No similar projects found.</p>
                     {% endfor %}
                 </div>
             </div>
+
         </div>
+        <!-- Latest Projects -->
         <div class="project-side-card">
             <div class="project-side-card1">
                 <h1 class="project-side-title">Latest Projects</h1>
                 <div class="latest-projects">
-                    <div class="latest-project">
-                        <h2>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint, corporis.</h2>
-                        <img src="../../static/assets/Projects/Project 1.jpg" alt="">
-                    </div>
-                    <div class="latest-project">
-                        <h2>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint, corporis.</h2>
-                        <img src="../../static/assets/Projects/Project 2.jpg" alt="">
-                    </div>
-                    <div class="latest-project">
-                        <h2>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint, corporis.</h2>
-                        <img src="../../static/assets/Projects/Project 3.jpg" alt="">
-                    </div>
+                    {% for latest_project in latest_projects %}
+                        <div class="latest-project">
+                            <h2>{{ latest_project.title }}</h2>
+                            {% with latest_project.images.first as first_image %}
+                                {% if first_image %}
+                                    <img src="{{ first_image.image.url }}" alt="Project Image">
+                                {% else %}
+                                    <img src="{% static 'images/default-project.jpg' %}" alt="Default Image">
+                                {% endif %}
+                            {% endwith %}
+                            <a href="{% url 'project_detail' slug=latest_project.slug %}">View Project</a>
+                        </div>
+                    {% empty %}
+                        <p>No latest projects available.</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>
+
     </div>
 
 {% endblock %}

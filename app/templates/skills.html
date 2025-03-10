@@ -65,20 +65,23 @@
                                     <h2>Used Resources</h2>
                                     <ul>
                                         {% for resource in skill.get_resource_list %}
-                                            {% if "youtube.com" in resource %}
-                                                <li>
-                                                    <iframe width="100%" height="315" 
-                                                            src="{{ resource|replace:'watch?v=,embed/' }}" 
-                                                            frameborder="0" allowfullscreen>
-                                                    </iframe>
-                                                </li>
-                                            {% elif ".pdf" in resource or ".doc" in resource %}
-                                                <li>
-                                                    <iframe src="{{ resource }}" width="100%" height="500px"></iframe>
-                                                </li>
-                                            {% else %}
-                                                <li><a href="{{ resource }}" target="_blank">{{ resource }}</a></li>
-                                            {% endif %}
+                                        {% if "youtube.com/watch?v=" in resource %}
+                                            <li>
+                                                <iframe width="100%" height="315" 
+                                                        src="{{ resource|cut:'watch?v='|add:'embed/' }}" 
+                                                        frameborder="0" allowfullscreen>
+                                                </iframe>
+                                            </li>
+                                        {% elif "youtu.be/" in resource %}
+                                            <li>
+                                                <iframe width="100%" height="315" 
+                                                        src="https://www.youtube.com/embed/{{ resource|slice:'17:' }}" 
+                                                        frameborder="0" allowfullscreen>
+                                                </iframe>
+                                            </li>
+                                        {% else %}
+                                            <li><a href="{{ resource }}" target="_blank">{{ resource }}</a></li>
+                                        {% endif %}
                                         {% endfor %}
                                     </ul>
                                 </div>
