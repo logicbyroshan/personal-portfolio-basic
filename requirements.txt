@@ -6,6 +6,7 @@ gunicorn
 mysqlclient
 packaging
 pillow
+python-dotenv
 sqlparse
 tzdata
 whitenoise
