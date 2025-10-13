@@ -27,24 +27,62 @@
 
         <div class="navbar">
             <div class="logo">
-                <div class="hamburger">
-                    <img src="{% static 'images/icons/interface.png' %}" alt="Hamburger Menu" id="hamburger-icon">
-                    
-                    <div class="hemburger-menu hidden" id="hamburger-menu">
-                        <ul>
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/projects">Projects</a></li>
-                            <li><a href="/skills">Skills</a></li>
-                            <li><a href="/blogs">Blogs</a></li>
-                            <li><a href="{% url 'home' %}#contact">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
                 <div class="logo-img">
                     <a href="/">
                         <img src="{% static 'images/stock/Roshan Logo White.png' %}" alt="logo">
                         <p>Portfolio</p>
                     </a>
+                </div>
+            </div>
+
+            <!-- Mobile Hamburger Menu -->
+            <div class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+
+            <!-- Mobile Navigation Overlay -->
+            <div class="mobile-nav-overlay" id="mobile-nav-overlay">
+                <div class="mobile-nav-content">
+                    <div class="mobile-nav-header">
+                        <div class="mobile-logo">
+                            <img src="{% static 'images/stock/Roshan Logo White.png' %}" alt="logo">
+                            <p>Portfolio</p>
+                        </div>
+                        <button class="close-mobile-menu" id="close-mobile-menu">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="mobile-nav-links">
+                        <a href="/" class="mobile-nav-link">
+                            <span class="nav-icon">🏠</span>
+                            Home
+                        </a>
+                        <a href="/projects" class="mobile-nav-link">
+                            <span class="nav-icon">💼</span>
+                            Projects
+                        </a>
+                        <a href="/skills" class="mobile-nav-link">
+                            <span class="nav-icon">⚡</span>
+                            Skills
+                        </a>
+                        <a href="/blogs" class="mobile-nav-link">
+                            <span class="nav-icon">📝</span>
+                            Blogs
+                        </a>
+                        <a href="{% url 'home' %}#contact" class="mobile-nav-link">
+                            <span class="nav-icon">📧</span>
+                            Contact
+                        </a>
+                    </nav>
+                    <div class="mobile-nav-footer">
+                        <button class="mobile-resume-btn" onclick="showPopup()">
+                            Download Resume
+                        </button>
+                    </div>
                 </div>
             </div>
         
@@ -64,21 +102,6 @@
         
         {% block content %}
         {% endblock %}
-        
-        <!-- Resume Popup -->
-        <div id="popup" class="popup">
-            <div class="popup-content">
-            {% if resume and resume.file %}
-                <iframe src="https://docs.google.com/gview?url={{ resume.file.url }}&embedded=true" width="100%" height="90%"></iframe>
-                <a href="{{ resume.file.url }}" download>
-                    <button class="download-btn">Download</button>
-                </a>
-                <span class="close" onclick="closePopup()">&times;</span>
-            {% else %}
-                <p>No resume available.</p>
-            {% endif %}
-            </div>
-        </div>
 
         <div class="footer">
             <h1>Thank you for visiting</h1>
@@ -161,59 +184,372 @@
         </div>
     </div>
 
+    <!-- Resume Popup - Outside main container for proper layering -->
+    <div id="popup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>Resume Preview</h3>
+                <span class="close-btn" onclick="closePopup()" title="Close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </div>
+            
+            <div class="popup-body">
+                {% if resume and resume.file %}
+                    <div class="iframe-container">
+                        <iframe src="https://docs.google.com/gview?url={{ resume.file.url }}&embedded=true" width="100%" height="100%"></iframe>
+                    </div>
+                    
+                    <div class="popup-actions">
+                        <a href="{{ resume.file.url }}" download class="download-link">
+                            <button class="download-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Download Resume
+                            </button>
+                        </a>
+                        <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+                    </div>
+                {% else %}
+                    <div class="no-resume">
+                        <p>No resume available at the moment.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
     <script src="{% static 'js/index.js' %}"></script>
     <script src="{% static 'js/contact.js' %}"></script>
     <script>
         function showPopup() {
-            document.getElementById("popup").style.display = "block";
+            console.log("Opening popup...");
+            
+            const popup = document.getElementById("popup");
+            const body = document.body;
+            
+            if (!popup) {
+                console.error("Popup element not found!");
+                return;
+            }
+            
+            // Simple display toggle
+            popup.style.display = "block";
+            body.classList.add("popup-open");
+            
+            console.log("Popup opened successfully");
         }
 
         function closePopup() {
-            document.getElementById("popup").style.display = "none";
+            console.log("Closing popup...");
+            
+            const popup = document.getElementById("popup");
+            const body = document.body;
+            
+            if (popup) {
+                popup.style.display = "none";
+                body.classList.remove("popup-open");
+            }
+            
+            console.log("Popup closed successfully");
         }
+
+        // Skill Popup Functions (Global)
+        window.showSkillPopup = function(id) {
+            console.log("Opening skill popup:", id);
+            
+            const popup = document.getElementById(id);
+            const body = document.body;
+            
+            if (!popup) {
+                console.error("Skill popup element not found:", id);
+                console.log("Available elements with IDs:", Array.from(document.querySelectorAll('[id]')).map(el => el.id));
+                return;
+            }
+            
+            popup.style.display = "flex";
+            body.classList.add("skill-popup-open");
+            
+            console.log("Skill popup opened successfully");
+        }
+
+        window.closeSkillPopup = function(id) {
+            console.log("Closing skill popup:", id);
+            
+            const popup = document.getElementById(id);
+            const body = document.body;
+            
+            if (popup) {
+                popup.style.display = "none";
+                body.classList.remove("skill-popup-open");
+            }
+            
+            console.log("Skill popup closed successfully");
+        }
+
+        // Test popup existence and setup event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById("popup");
+            console.log("Popup element found:", popup);
+            
+            if (popup) {
+                popup.addEventListener('click', function(e) {
+                    if (e.target === popup) {
+                        closePopup();
+                    }
+                });
+            }
+            
+            // Handle skill popup events
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('skill-popup-overlay')) {
+                    const popupId = e.target.id;
+                    closeSkillPopup(popupId);
+                }
+            });
+            
+            // Close popup with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closePopup();
+                    // Close skill popups
+                    const openSkillPopups = document.querySelectorAll('.skill-popup-overlay[style*="block"]');
+                    openSkillPopups.forEach(popup => {
+                        closeSkillPopup(popup.id);
+                    });
+                }
+            });
+        });
     </script>
     <style>
-        .popup {
+        /* No blur effects - just prevent scrolling */
+        body.popup-open {
+            overflow: hidden;
+        }
+
+        /* Popup Overlay - Simple and reliable centering */
+        .popup-overlay {
             display: none;
             position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 650px;
-            height: 95vh;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            text-align: center;
-        }
-        .popup-content {
-            position: relative;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999999;
+            overflow: auto;
         }
-        .close {
-                position: absolute;
-                bottom: 10px;
-                right: 15px;
-                font-size: 24px;
-                font-weight: bold;
-                color: black;
-                cursor: pointer;
-                background-color: red;
-                padding: 2px 10px;
-            }
 
-        .close:hover {
-            color: rgb(0, 26, 255);
+
+
+        /* Popup Content - Centered using margin method */
+        .popup-content {
+            background: #1a1a1a;
+            border: 3px solid #00ff88;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            height: 85vh;
+            max-height: 700px;
+            margin: 5vh auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.3);
+            position: relative;
+        }
+
+        .popup-overlay.show .popup-content {
+            transform: scale(1);
+        }
+
+        /* Popup Header */
+        .popup-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 20px !important;
+            background: #00ff88 !important; /* Bright green for visibility */
+            color: #000 !important;
+            flex-shrink: 0 !important;
+        }
+
+        .popup-header h3 {
+            margin: 0 !important;
+            color: #000000 !important;
+            font-size: 24px !important;
+            font-weight: bold !important;
+        }
+
+        /* Close Button */
+        .close-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #ff4757;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .close-btn:hover {
+            background: #ff3742;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .close-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Popup Body */
+        .popup-body {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 20px !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        /* Iframe Container */
+        .iframe-container {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Popup Actions */
+        .popup-actions {
+            display: flex;
+            gap: 15px;
+            padding: 20px 25px;
+            border-top: 2px solid #333;
+            background: #2a2a2a;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .download-link {
+            text-decoration: none;
         }
 
         .download-btn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #007BFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
+            border-radius: 12px;
+            font-family: var(--secondary-font);
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .cancel-btn {
+            padding: 12px 24px;
+            background: transparent;
+            color: #ccc;
+            border: 2px solid #555;
+            border-radius: 12px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #555;
+            color: white;
+        }
+
+        /* No Resume State */
+        .no-resume {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .no-resume p {
+            color: #ccc;
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .popup-content {
+                width: 95%;
+                height: 95vh;
+                margin: 20px;
+            }
+
+            .popup-header {
+                padding: 15px 20px;
+            }
+
+            .popup-header h3 {
+                font-size: 20px;
+            }
+
+            .popup-actions {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+
+            .download-btn,
+            .cancel-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .popup-content {
+                width: 98%;
+                height: 98vh;
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .iframe-container {
+                padding: 15px;
+            }
         }
     </style>
 </body>

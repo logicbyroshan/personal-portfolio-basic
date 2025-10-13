@@ -7,7 +7,16 @@
 <div class="all-container">
     <div class="cards-header">
         <h1>my projects.</h1>
-        <p>Here are some of my blogs that I have written. I hope you will find them helpful.</p>
+        <p>Here are some of my projects that showcase my skills and experience.</p>
+        {% if query or selected_category %}
+        <div class="filter-status">
+            <p>
+                {% if query %}Showing results for: "<strong>{{ query }}</strong>"{% endif %}
+                {% if selected_category %}{% if query %} | {% endif %}Category: <strong>{{ selected_category }}</strong>{% endif %}
+                <a href="{% url 'project_list' %}" class="clear-filters">Clear all filters</a>
+            </p>
+        </div>
+        {% endif %}
     </div>
     {% include 'filters.html' %}
     <div class="ver-cards">
@@ -50,7 +59,11 @@
             </div>
         </div>
         {% empty %}
-        <p>No Projects Found</p>
+        <div class="no-results">
+            <h3>No Projects Found</h3>
+            <p>Try adjusting your search criteria or browse all projects.</p>
+            <a href="{% url 'project_list' %}"><button class="outline-btn">View All Projects</button></a>
+        </div>
         {% endfor %}
     </div>
 </div>    

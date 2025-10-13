@@ -1,13 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Navbar toggle
-  const hamburgerIcon = document.querySelector(".hamburger img");
-  const hamburgerMenu = document.querySelector(".hamburger .hemburger-menu");
+  // Mobile Navigation
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+  const closeMobileMenu = document.getElementById('close-mobile-menu');
+  const body = document.body;
 
-  if (hamburgerIcon && hamburgerMenu) {
-    hamburgerIcon.addEventListener("click", () => {
-      hamburgerMenu.classList.toggle("open");
+  // Open mobile menu
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileNavOverlay.classList.add('active');
+      mobileMenuToggle.classList.add('active');
+      body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
     });
   }
+
+  // Close mobile menu
+  if (closeMobileMenu) {
+    closeMobileMenu.addEventListener('click', closeMobileNavigation);
+  }
+
+  // Close menu when clicking overlay
+  if (mobileNavOverlay) {
+    mobileNavOverlay.addEventListener('click', (e) => {
+      if (e.target === mobileNavOverlay) {
+        closeMobileNavigation();
+      }
+    });
+  }
+
+  // Close mobile navigation function
+  function closeMobileNavigation() {
+    mobileNavOverlay.classList.remove('active');
+    mobileMenuToggle.classList.remove('active');
+    body.style.overflow = ''; // Restore scrolling
+  }
+
+  // Close menu when clicking on nav links
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      setTimeout(closeMobileNavigation, 100); // Small delay for smooth transition
+    });
+  });
 
   // Slider functionality
   let sliderIndex = 0;
@@ -49,23 +83,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
   setTimeout(typeSkill, 1500);
 
-// FAQ Toggle
-document.querySelectorAll(".faq-card").forEach(card => {
-  const answer = card.querySelector(".answer");
-  const toggleIcon = card.querySelector(".faq-toggle");
+  // FAQ Toggle
+  document.querySelectorAll(".faq-card").forEach(card => {
+    const answer = card.querySelector(".answer");
+    const toggleIcon = card.querySelector(".faq-toggle");
+    const btnFaq = card.querySelector(".btn-faq");
 
-  // Fetching correct paths from attributes
-  const openIcon = toggleIcon.getAttribute("data-closed-icon");  
-  const closeIcon = toggleIcon.getAttribute("data-open-icon");   
+    // Check if required elements exist
+    if (!answer || !toggleIcon) {
+      console.warn("FAQ elements not found in card:", card);
+      return;
+    }
 
-  toggleIcon.addEventListener("click", () => {
-      answer.classList.toggle("visible");
-      
-      // Force browser to update the image
-      toggleIcon.src = answer.classList.contains("visible") ? closeIcon + "?v=" + new Date().getTime() : openIcon + "?v=" + new Date().getTime();
+    // Fetching correct paths from attributes
+    const openIcon = toggleIcon.getAttribute("data-closed-icon");  
+    const closeIcon = toggleIcon.getAttribute("data-open-icon");   
+
+    // Make entire card clickable
+    card.addEventListener("click", (e) => {
+        e.preventDefault();
+        
+        answer.classList.toggle("visible");
+        
+        // Visual feedback for the entire card
+        if (answer.classList.contains("visible")) {
+          // Card is opening
+          toggleIcon.classList.add("rotated");
+          if (btnFaq) {
+            btnFaq.style.background = 'var(--main-bg-color-2)';
+            btnFaq.style.transform = 'scale(1.1)';
+          }
+          card.style.background = 'var(--main-bg-color-2)';
+          
+          // Update icon
+          if (closeIcon) {
+            toggleIcon.src = closeIcon + "?v=" + new Date().getTime();
+          }
+        } else {
+          // Card is closing
+          toggleIcon.classList.remove("rotated");
+          if (btnFaq) {
+            btnFaq.style.background = 'rgba(255, 255, 255, 0.1)';
+            btnFaq.style.transform = 'scale(1)';
+          }
+          card.style.background = 'rgb(25, 25, 25)';
+          
+          // Update icon
+          if (openIcon) {
+            toggleIcon.src = openIcon + "?v=" + new Date().getTime();
+          }
+        }
+    });
   });
-});
-
 
   // Progress bar animation
   document.querySelectorAll(".progress-container").forEach(container => {

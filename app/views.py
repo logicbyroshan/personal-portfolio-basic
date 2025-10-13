@@ -1,19 +1,65 @@
-from django.shortcuts import render, redirect, get_object_or_404  # Fix here
-from .models import Project, Blog, Skill, Experience, FAQ, Resume
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Project, Blog, Skill, Experience, FAQ, Resume, ContactMessage
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import ContactForm
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.http import FileResponse, HttpResponse
 import logging
 
 
 logger = logging.getLogger(__name__)
 
-@csrf_exempt  # Temporarily disable CSRF for testing (remove later)
+def handle_contact_submission(request):
+    """Handle contact form submission and save to database"""
+    try:
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+
+        # Validate required fields
+        if not all([name, email, subject, message]):
+            return JsonResponse({
+                "success": False, 
+                "error": "All fields are required"
+            }, status=400)
+
+        # Save to database
+        contact_message = ContactMessage.objects.create(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+
+        # Try to send email (optional, won't fail if email doesn't work)
+        try:
+            send_mail(
+                subject=f"New Contact Form: {subject}",
+                message=f"From: {name} ({email})\n\nMessage:\n{message}",
+                from_email="contact@roshandamor.site",
+                recipient_list=["contact@roshandamor.site"],
+                fail_silently=True,
+            )
+            logger.info(f"Email sent successfully for contact ID: {contact_message.id}")
+        except Exception as email_error:
+            logger.warning(f"Email sending failed but contact saved: {email_error}")
+
+        return JsonResponse({
+            "success": True,
+            "message": "Your message has been sent successfully! We'll get back to you soon."
+        })
+        
+    except Exception as e:
+        logger.error(f"Contact form submission failed: {e}")
+        return JsonResponse({
+            "success": False, 
+            "error": "Something went wrong. Please try again later."
+        }, status=500)
+
 def contact_view(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -82,6 +128,10 @@ def get_unique_categories(queryset, field_name):
     return sorted(categories)  # Return sorted distinct categories
 
 def home(request):
+    # Handle contact form submission
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return handle_contact_submission(request)
+    
     sort_by = request.GET.get("sort", "-publication_date")  
     category = request.GET.get("category", "")
 
@@ -101,11 +151,11 @@ def home(request):
         faqs = faqs.filter(Q(categories__icontains=category))
 
     # Apply sorting dynamically
-    projects = projects.order_by(sort_by)[:6]
-    blogs = blogs.order_by(sort_by)[:6]
+    projects = projects.order_by(sort_by)[:3]
+    blogs = blogs.order_by(sort_by)[:3]
     skills = skills.order_by("-level")[:6]
     experiences = experiences.order_by("-start_date")[:3]
-    faqs = faqs.order_by("-created_at")[:6]
+    faqs = faqs.order_by("-created_at")[:5]
 
     # Get distinct categories for all sections
     blog_categories = get_unique_categories(Blog.objects, "categories")
@@ -172,43 +222,65 @@ def blog_detail(request, slug):
 
 # Project Views
 def project_list(request):
-    query = request.GET.get('search', '')  # Fix for URL issue
-    category = request.GET.get('category', '')  # Category filter
-    sort_by = request.GET.get('sort', '-created_at')  # Default sorting by newest first
+    query = request.GET.get('search', '')  
+    category = request.GET.get('category', '')  
+    sort_by = request.GET.get('sort', 'latest')  
 
     projects = Project.objects.all()
-    categories = Project.objects.values_list('categories', flat=True).distinct()  # ✅ Get all categories
+    
+    # Get unique categories for filtering (split and flatten)
+    category_list = []
+    for proj in Project.objects.all():
+        if proj.categories:
+            categories = [cat.strip() for cat in proj.categories.split(',')]
+            category_list.extend(categories)
+    category_list = sorted(list(set(category_list)))
 
     if query:
         projects = projects.filter(
-            Q(title__icontains=query) | Q(description__icontains=query)
+            Q(title__icontains=query) | 
+            Q(description__icontains=query) |
+            Q(categories__icontains=query)
         )
 
-    if category and category != "all":  # ✅ Ensure "all" option works
+    if category and category != "all":  
         projects = projects.filter(categories__icontains=category)
 
     if sort_by == 'oldest':
         projects = projects.order_by('created_at')
-    else:
+    else:  # latest
         projects = projects.order_by('-created_at')
 
     return render(request, 'projects.html', {
-        'projects': projects, 'query': query, 'category': category, 'sort_by': sort_by, 'categories': categories
+        'projects': projects, 
+        'query': query, 
+        'selected_category': category, 
+        'sort': sort_by, 
+        'category_list': category_list
     })
 
 
 # Blog Views
 def blog_list(request):
-    query = request.GET.get('search', '')  # Fix for URL issue
-    category = request.GET.get('category', '')  # Category filter
-    sort_by = request.GET.get('sort', '-publication_date')  
+    query = request.GET.get('search', '')  
+    category = request.GET.get('category', '')  
+    sort_by = request.GET.get('sort', 'latest')  
 
     blogs = Blog.objects.all()
-    categories = Blog.objects.values_list('categories', flat=True).distinct()  # ✅ Get all categories
+    
+    # Get unique categories for filtering (split and flatten)
+    category_list = []
+    for blog in Blog.objects.all():
+        if blog.categories:
+            categories = [cat.strip() for cat in blog.categories.split(',')]
+            category_list.extend(categories)
+    category_list = sorted(list(set(category_list)))
 
     if query:
         blogs = blogs.filter(
-            Q(title__icontains=query) | Q(content__icontains=query)
+            Q(title__icontains=query) | 
+            Q(content__icontains=query) |
+            Q(categories__icontains=query)
         )
 
     if category and category != "all":  
@@ -216,38 +288,59 @@ def blog_list(request):
 
     if sort_by == 'oldest':
         blogs = blogs.order_by('publication_date')
-    else:
+    else:  # latest
         blogs = blogs.order_by('-publication_date')
 
     return render(request, 'blogs.html', {
-        'blogs': blogs, 'query': query, 'category': category, 'sort_by': sort_by, 'categories': categories
+        'blogs': blogs, 
+        'query': query, 
+        'selected_category': category, 
+        'sort': sort_by, 
+        'category_list': category_list
     })
 
 
 # Skill Views
 def skill_list(request):
-    query = request.GET.get('search', '')  # Fix for URL issue
+    query = request.GET.get('search', '')  
     category = request.GET.get('category', '')  
-    sort_by = request.GET.get('sort', 'name')  
+    sort_by = request.GET.get('sort', 'latest')  
 
     skills = Skill.objects.all()
-    categories = Skill.objects.values_list('categories', flat=True).distinct()  # ✅ Get all categories
+    
+    # Get unique categories for filtering (split and flatten)
+    category_list = []
+    for skill in Skill.objects.all():
+        if skill.categories:
+            categories = [cat.strip() for cat in skill.categories.split(',')]
+            category_list.extend(categories)
+    category_list = sorted(list(set(category_list)))
 
     if query:
         skills = skills.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
+            Q(name__icontains=query) | 
+            Q(description__icontains=query) |
+            Q(categories__icontains=query)
         )
 
     if category and category != "all":  
         skills = skills.filter(categories__icontains=category)
 
-    if sort_by == 'level':
+    if sort_by == 'oldest':
+        skills = skills.order_by('created_at')
+    elif sort_by == 'level':
         skills = skills.order_by('-level')  
     elif sort_by == 'name':
         skills = skills.order_by('name')
+    else:  # latest
+        skills = skills.order_by('-created_at')
 
     return render(request, 'skills.html', {
-        'skills': skills, 'query': query, 'category': category, 'sort_by': sort_by, 'categories': categories
+        'skills': skills, 
+        'query': query, 
+        'selected_category': category, 
+        'sort': sort_by, 
+        'category_list': category_list
     })
 
 
@@ -282,24 +375,37 @@ def experience_list(request):
 def faq_list(request):
     query = request.GET.get('search', '')
     category = request.GET.get('category', '')
-    sort_by = request.GET.get('sort', '-created_at')  
+    sort_by = request.GET.get('sort', 'latest')
 
     faqs = FAQ.objects.all()
-    categories = FAQ.objects.values_list('categories', flat=True).distinct()
+    
+    # Get unique categories for filtering (split and flatten)
+    category_list = []
+    for faq in FAQ.objects.all():
+        if faq.category:
+            categories = [cat.strip() for cat in faq.category.split(',')]
+            category_list.extend(categories)
+    category_list = sorted(list(set(category_list)))
 
     if query:
         faqs = faqs.filter(
-            Q(question__icontains=query) | Q(answer__icontains=query)
+            Q(question__icontains=query) | 
+            Q(answer__icontains=query) |
+            Q(category__icontains=query)
         )
 
     if category and category != "all":  
-        faqs = faqs.filter(categories__icontains=category)
+        faqs = faqs.filter(category__icontains=category)
 
     if sort_by == 'oldest':
         faqs = faqs.order_by('created_at')
-    else:
+    else:  # latest
         faqs = faqs.order_by('-created_at')
 
     return render(request, 'faqs.html', {
-        'faqs': faqs, 'query': query, 'category': category, 'sort_by': sort_by, 'categories': categories
+        'faqs': faqs, 
+        'query': query, 
+        'selected_category': category, 
+        'sort': sort_by, 
+        'category_list': category_list
     })

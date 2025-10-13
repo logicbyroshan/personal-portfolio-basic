@@ -3,7 +3,6 @@
 {% load static %}
 
 {% block content %}
-    <div class="main-container">
         <!--Home Is Staring From Here-->
         <div class="home-container">
             <div class="home-content">
@@ -64,53 +63,15 @@
         
                             <div class="skills-links">
                                 {% if skill.certificate %}
-                                    <button class="outline-btn" onclick="openModal('certificate-modal-{{ skill.id }}')">
+                                    <button class="outline-btn" onclick="showSkillPopup('certificate-modal-{{ skill.id }}')">
                                         View Certificate
                                     </button>
-        
-                                    <!-- Certificate Popup -->
-                                    <div id="certificate-modal-{{ skill.id }}" class="modal">
-                                        <div class="modal-content">
-                                            <span class="close" onclick="closeModal('certificate-modal-{{ skill.id }}')">&times;</span>
-                                            <h2>Certificate Preview</h2>
-                                            <iframe src="{{ skill.certificate.url }}" width="100%" height="500px"></iframe>
-                                        </div>
-                                    </div>
                                 {% endif %}
         
                                 {% if skill.resource_links %}
-                                    <button class="outline-btn" onclick="openModal('resource-modal-{{ skill.id }}')">
+                                    <button class="outline-btn" onclick="showSkillPopup('resource-modal-{{ skill.id }}')">
                                         Used Resources
                                     </button>
-        
-                                    <!-- Resource Popup -->
-                                    <div id="resource-modal-{{ skill.id }}" class="modal">
-                                        <div class="modal-content">
-                                            <span class="close" onclick="closeModal('resource-modal-{{ skill.id }}')">&times;</span>
-                                            <h2>Used Resources</h2>
-                                            <ul>
-                                                {% for resource in skill.get_resource_list %}
-                                                {% if "youtube.com/watch?v=" in resource %}
-                                                    <li>
-                                                        <iframe width="100%" height="315" 
-                                                                src="{{ resource|cut:'watch?v='|add:'embed/' }}" 
-                                                                frameborder="0" allowfullscreen>
-                                                        </iframe>
-                                                    </li>
-                                                {% elif "youtu.be/" in resource %}
-                                                    <li>
-                                                        <iframe width="100%" height="315" 
-                                                                src="https://www.youtube.com/embed/{{ resource|slice:'17:' }}" 
-                                                                frameborder="0" allowfullscreen>
-                                                        </iframe>
-                                                    </li>
-                                                {% else %}
-                                                    <li><a href="{{ resource }}" target="_blank">{{ resource }}</a></li>
-                                                {% endif %}
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -138,7 +99,7 @@
                         {% if project.images.all %}
                             <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
                         {% else %}
-                            <img src="../static/images/others/Project Image1.jpg" alt="Default Image"> <!-- Fallback -->
+                            <img src="{% static 'images/others/Project Image1.jpg' %}" alt="Default Image"> <!-- Fallback -->
                         {% endif %}                       
                     </div>
                     <div class="project-content">
@@ -272,7 +233,7 @@
                 <div class="faq-card" data-category="{{ faq.category }}">
                     <div class="faq-content">
                         <h2>{{ faq.question }}</h2>
-                        <p class="answer" style="display: none;">{{ faq.answer }}</p>
+                        <p class="answer">{{ faq.answer }}</p>
                     </div>
                     <div class="btn-faq">
                         <img class="faq-toggle" 
@@ -292,6 +253,90 @@
             </div>
         </div>
 
+        <!-- Modern Skill Popups -->
+        {% for skill in skills %}
+            {% if skill.certificate %}
+                <!-- Certificate Popup -->
+                <div id="certificate-modal-{{ skill.id }}" class="skill-popup-overlay">
+                    <div class="skill-popup-content">
+                        <div class="skill-popup-header">
+                            <h3>{{ skill.name }} - Certificate</h3>
+                            <span class="skill-close-btn" onclick="closeSkillPopup('certificate-modal-{{ skill.id }}')" title="Close">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                        
+                        <div class="skill-popup-body">
+                            <div class="skill-iframe-container">
+                                <iframe src="{{ skill.certificate.url }}" width="100%" height="100%"></iframe>
+                            </div>
+                            
+                            <div class="skill-popup-actions">
+                                <a href="{{ skill.certificate.url }}" download class="download-link">
+                                    <button class="skill-download-btn">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Download Certificate
+                                    </button>
+                                </a>
+                                <button class="skill-cancel-btn" onclick="closeSkillPopup('certificate-modal-{{ skill.id }}')">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if skill.resource_links %}
+                <!-- Resource Popup -->
+                <div id="resource-modal-{{ skill.id }}" class="skill-popup-overlay">
+                    <div class="skill-popup-content">
+                        <div class="skill-popup-header">
+                            <h3>{{ skill.name }} - Resources</h3>
+                            <span class="skill-close-btn" onclick="closeSkillPopup('resource-modal-{{ skill.id }}')" title="Close">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                        
+                        <div class="skill-popup-body">
+                            <div class="resources-container">
+                                {% for resource in skill.get_resource_list %}
+                                    <div class="resource-item">
+                                        {% if "youtube.com/watch?v=" in resource %}
+                                            <iframe width="100%" height="315" 
+                                                    src="{{ resource|cut:'watch?v='|add:'embed/' }}" 
+                                                    frameborder="0" allowfullscreen>
+                                            </iframe>
+                                        {% elif "youtu.be/" in resource %}
+                                            <iframe width="100%" height="315" 
+                                                    src="https://www.youtube.com/embed/{{ resource|slice:'17:' }}" 
+                                                    frameborder="0" allowfullscreen>
+                                            </iframe>
+                                        {% else %}
+                                            <a href="{{ resource }}" target="_blank" class="resource-link">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                {{ resource }}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="skill-popup-actions">
+                                <button class="skill-cancel-btn" onclick="closeSkillPopup('resource-modal-{{ skill.id }}')">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
         <!-- Contact Section Starts Here -->
         <div class="all-container" id="contact">
             <div class="cards-header">
@@ -302,22 +347,22 @@
             <div class="mail-contact-card">
                 <!-- Left Contact Information -->
                 <div class="left-contact">
-                    <img src="../static/images/stock/Contact.jpg" alt="Contact Image">
+                    <img src="{% static 'images/stock/Contact.jpg' %}" alt="Contact Image">
                     <div class="contact-section">
                         <div class="contact">
-                            <img src="../static/images/icons/g-mail.png" alt="Email Icon">
+                            <img src="{% static 'images/icons/g-mail.png' %}" alt="Email Icon">
                             <a href="mailto:iamroshandamor@gmail.com"><p>iamroshandamor@gmail.com</p></a>
                         </div>
                         <div class="contact">
-                            <img src="../static/images/icons/rmail.png" alt="Email Icon">
+                            <img src="{% static 'images/icons/rmail.png' %}" alt="Email Icon">
                             <a href="mailto:contact@roshandamor.site"><p>contact@roshandamor.site</p></a>
                         </div>
                         <div class="contact">
-                            <img src="../static/images/icons/phone.png" alt="Phone Icon">
+                            <img src="{% static 'images/icons/phone.png' %}" alt="Phone Icon">
                             <a href="tel:+91XXXXXXXXXX"><p>+91 1234567890</p></a>
                         </div>
                         <div class="contact">
-                            <img src="../static/images/icons/address.png" alt="Address Icon">
+                            <img src="{% static 'images/icons/address.png' %}" alt="Address Icon">
                             <a href="https://www.google.com/maps/search/?api=1&query=Patanjali+Parisar,+Abbas+Nagar,+Gandhinagar,+Bhopal,+MP">
                                 <p>Indore, Madhya Pradesh, India</p>
                             </a>
@@ -329,7 +374,7 @@
                 <div class="right-contact">
                     <div class="contact-form-card">
                         <!-- Contact Form -->
-                        <form id="contactForm" method="post">
+                        <form id="contactForm" method="post" action="{% url 'home' %}">
                             {% csrf_token %}
                 
                             <!-- Name Field -->
@@ -348,7 +393,7 @@
                             <button class="contact-btn" type="submit">Send Message</button>
                 
                             <!-- Success/Error Messages -->
-                            <div id="formMessage"></div>
+                            <div id="formMessage" class="message-container"></div>
                         </form>
                     </div>
                 </div>
@@ -357,47 +402,193 @@
         </div>
         <!-- Contact Section Ends Here -->
 
-    </div>
 
-
-<!-- CSS for Modal -->
+<!-- CSS for Skill Popups -->
 <style>
-    .modal {
+    /* Skill Popup Styles */
+    .skill-popup-overlay {
         display: none;
         position: fixed;
-        z-index: 1000;
-        left: 0;
         top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s ease-in-out;
     }
-    .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 20px;
-        border-radius: 10px;
-        width: 80%;
-        max-width: 600px;
-        text-align: center;
+
+    .skill-popup-overlay.show {
+        display: flex;
+    }
+
+    .skill-popup-content {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 90%;
+        max-height: 90%;
+        width: 600px;
         position: relative;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transform: translateY(0);
+        animation: slideUp 0.4s ease-out;
+        overflow: auto;
     }
-    .close {
-        position: absolute;
-        top: 10px;
-        right: 20px;
+
+    .skill-popup-content h3 {
+        color: #ffffff;
+        margin: 0 0 20px 0;
         font-size: 24px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .skill-popup-content iframe {
+        width: 100%;
+        height: 500px;
+        border: none;
+        border-radius: 10px;
+        background: #ffffff;
+    }
+
+    .skill-popup-content p {
+        color: #ffffff;
+        line-height: 1.6;
+        margin: 15px 0;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .skill-close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        line-height: 1;
+    }
+
+    .skill-close-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: rotate(90deg);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(50px) scale(0.9); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+    }
+
+    /* Body class when skill popup is open */
+    body.skill-popup-open {
+        overflow: hidden;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .skill-popup-content {
+            width: 95%;
+            padding: 20px;
+            margin: 20px;
+        }
+        
+        .skill-popup-content h3 {
+            font-size: 20px;
+        }
+        
+        .skill-popup-content iframe {
+            height: 400px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .skill-popup-content {
+            padding: 15px;
+        }
+        
+        .skill-popup-content iframe {
+            height: 300px;
+        }
     }
 </style>
 
-<!-- JavaScript for Modal -->
+<!-- JavaScript for Skill Popups -->
 <script>
-    function openModal(id) {
-        document.getElementById(id).style.display = "block";
+    function showSkillPopup(id) {
+        console.log("Opening skill popup:", id);
+        
+        const popup = document.getElementById(id);
+        const body = document.body;
+        
+        if (!popup) {
+            console.error("Skill popup element not found:", id);
+            return;
+        }
+        
+        popup.style.display = "flex";
+        body.classList.add("skill-popup-open");
+        
+        console.log("Skill popup opened successfully");
     }
-    function closeModal(id) {
-        document.getElementById(id).style.display = "none";
+
+    function closeSkillPopup(id) {
+        console.log("Closing skill popup:", id);
+        
+        const popup = document.getElementById(id);
+        const body = document.body;
+        
+        if (popup) {
+            popup.style.display = "none";
+            body.classList.remove("skill-popup-open");
+        }
+        
+        console.log("Skill popup closed successfully");
     }
+
+    // Close popup when clicking outside or pressing Escape
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle click outside to close
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('skill-popup-overlay')) {
+                const popupId = e.target.id;
+                closeSkillPopup(popupId);
+            }
+        });
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openPopups = document.querySelectorAll('.skill-popup-overlay[style*="flex"]');
+                openPopups.forEach(popup => {
+                    closeSkillPopup(popup.id);
+                });
+            }
+        });
+    });
 </script>
 {% endblock %}
