@@ -114,6 +114,9 @@ def download_resume(request):
 
     return HttpResponse("No resume available", status=404)
 
+def user_terms_view(request):
+    return render(request, "user-terms.html")
+
 
 
 def get_unique_categories(queryset, field_name):

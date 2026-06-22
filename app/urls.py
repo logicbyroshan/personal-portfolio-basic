@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views import (
     home, project_list, project_detail, blog_list, blog_detail, 
-    skill_list, experience_list, faq_list, contact_view, get_resume, download_resume
+    skill_list, experience_list, faq_list, contact_view, get_resume, download_resume, user_terms_view
 )
 
 urlpatterns = [
@@ -31,6 +31,7 @@ urlpatterns = [
 
     path("resume/", get_resume, name="resume"),
     path("resume/download/", download_resume, name="download_resume"),
+    path("user-terms/", user_terms_view, name="user_terms"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

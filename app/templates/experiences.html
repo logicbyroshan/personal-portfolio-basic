@@ -1,49 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Quicksand:wght@300..700&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-    <title>Roshan Portfolio |</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <link rel="icon" type="image/x-icon" href="../static/assets/My Image/favicon.ico">
-    <link rel="stylesheet" href="../static/css/re-used.css">
-    <link rel="stylesheet" href="../static/css/experiences.css">
-</head>
-<body>
-    
+{% extends "portfolio-base.html" %}
+{% block title %} Roshan {% endblock %}
+{% load static %}
+
+{% block content %}
 <div class="all-container">
     <div class="cards-header">
         <h1>my experiences.</h1>
-        <p>Here are some of my blogs that I have written. I hope you will find them helpful.</p>
+        <p>Here are my professional experiences and work history.</p>
+        {% if query or selected_category %}
+        <div class="filter-status">
+            <p>
+                {% if query %}Showing results for: "<strong>{{ query }}</strong>"{% endif %}
+                {% if selected_category %}{% if query %} | {% endif %}Category: <strong>{{ selected_category }}</strong>{% endif %}
+                <a href="{% url 'experience_list' %}" class="clear-filters">Clear all filters</a>
+            </p>
+        </div>
+        {% endif %}
     </div>
     {% include 'filters.html' %}
     <div class="hor-cards">
         {% for experience in experiences %}
-        <div class="exp-card">
-            <div class="top-content">
-                <div class="exp-image">
-                    <img src="{{ experience.image.url }}" alt="{{ experience.title }}">
-                </div>
-                <h2>{{ experience.title }}</h2>
-                <div class="date">
-                    <p>{{ experience.start_date|date:"M-Y" }}</p>
-                    <p>{{ experience.end_date|date:"M-Y" }}</p>
-                </div>
-            </div>
-            <div class="exp-content">
-                <p>{{ experience.description }}</p>
-            </div>
-        </div>
+            {% include 'components/experience_card.html' with experience=experience %}
         {% empty %}
-        <p>No Experience Found</p>
+        <div class="no-results">
+            <h3>No Experience Found</h3>
+            <p>Try adjusting your search criteria.</p>
+        </div>
         {% endfor %}
     </div>
-
 </div>
-    <script src="../static/js/index.js"></script>
-    <script src="../static/js/all-page.js"></script>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load static %}
+<div class="blogs-card">
+    <div class="blogs-image">
+        <img src="{{ blog.image.url}}" alt="">
+    </div>
+    <div class="blogs-content">
+        <div class="date" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+            <span class="badge"><img src="{% static 'images/icons/calendar.png' %}" alt=""> {{ blog.publication_date|date:"M d, Y" }}</span>
+            <span class="badge">⏱️ {{ blog.time_to_read }} min read</span>
+        </div>
+        <h2 class="card-title">{{ blog.title }}</h2>
+        <div class="skills">
+            <p>Category:</p>
+            {% for category in blog.get_category_list %}
+                <span class="badge-outline">{{ category }}</span>
+            {% endfor %}
+        </div>
+        <div class="blogs-links">
+            <a href="{% url 'blog_detail' slug=blog.slug %}">
+                <button class="outline-btn">Read More</button>
+            </a>
+        </div>
+    </div>
+</div>

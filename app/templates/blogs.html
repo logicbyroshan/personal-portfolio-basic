@@ -21,30 +21,7 @@
             {% include 'filters.html' %}
             <div class="ver-cards">
                 {% for blog in blogs %}
-                <div class="blogs-card">
-                    <div class="blogs-image">
-                        <img src="{{ blog.image.url}}" alt="">
-                    </div>
-                    <div class="blogs-content">
-                        <div class="date">
-                            <img src="{% static 'images/icons/calendar.png' %}" alt="">
-                            <p>{{ blog.publication_date|date:"F d, Y" }}</p>
-                            <p>. Read Time: {{ blog.time_to_read }} min</p>
-                        </div>
-                        <h2>{{ blog.title }}</h2>
-                        <div class="skills">
-                            <p>Category : </p>
-                            {% for category in blog.get_category_list %}
-                                <span>{{ category }}</span>
-                            {% endfor %}
-                        </div>
-                        <div class="blogs-links">
-                            <a href="{% url 'blog_detail' slug=blog.slug %}">
-                                <button class="outline-btn">Read More</button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                {% include "components/blog_card.html" with blog=blog %}
                 {% empty %}
                 <div class="no-results">
                     <h3>No Blogs Found</h3>

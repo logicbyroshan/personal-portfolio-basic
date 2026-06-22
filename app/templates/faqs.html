@@ -21,19 +21,7 @@
             {% include 'filters.html' %}
             <div class="hor-cards">
                 {% for faq in faqs %}
-                <div class="faq-card" data-category="{{ faq.category }}">
-                    <div class="faq-content">
-                        <h2>{{ faq.question }}</h2>
-                        <p class="answer">{{ faq.answer }}</p>
-                    </div>
-                    <div class="btn-faq">
-                        <img class="faq-toggle" 
-                                src="{% static 'images/icons/open.png' %}" 
-                                alt="Show FAQ" 
-                                data-open-icon="{% static 'images/icons/close.png' %}" 
-                                data-closed-icon="{% static 'images/icons/open.png' %}">
-                    </div>
-                </div>
+                {% include "components/faq_card.html" with faq=faq %}
                 {% empty %}
                 <div class="no-results">
                     <h3>No FAQs Found</h3>

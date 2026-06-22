@@ -28,7 +28,7 @@
 }
 
 .exp-card {
-    background-color: rgb(25, 25, 25);
+    background: linear-gradient(135deg, #040914 0%, #041415 100%);
     width: 100%;
     border-radius: 20px;
     overflow: hidden;
@@ -46,43 +46,60 @@
 }
 
 .exp-image {
-    width: 300px;
-    height: 100px;
-    border-radius: 20px;
-    margin-bottom: 20px;
+    width: 200px;
+    height: 80px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .exp-image img {
     width: 100%;
+    height: 100%;
     object-fit: contain;
 }
-
 
 .top-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
+    gap: 20px;
 }
 
 .top-content h2 {
-    font-size: 40px;
+    font-size: 32px;
     font-family: var(--secondary-font);
     color: var(--main-text-color);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    text-align: center;
+    flex: 1;
 }
 
 .top-content .date {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
-.top-content .date p {
-    font-size: 25px;
-    font-family: var(--secondary-font);
-    color: var(--secondary-text-color);
-    font-weight: 700;
+
+@media (max-width: 768px) {
+    .top-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .exp-image {
+        justify-content: center;
+    }
+
+    .top-content .date {
+        justify-content: center;
+    }
 }
 
 .exp-content {

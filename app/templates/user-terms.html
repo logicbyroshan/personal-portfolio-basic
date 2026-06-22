@@ -1,0 +1,155 @@
+{% extends 'portfolio-base.html' %}
+{% load static %}
+
+{% block title %}User Terms & Privacy Policy | Roshan Portfolio{% endblock %}
+
+{% block content %}
+<div class="all-container">
+    <div class="cards-header">
+        <h1>User Terms & Privacy Policy</h1>
+        <p>Last updated: June 2026. Please read these terms carefully before using this portfolio.</p>
+    </div>
+
+    <div class="terms-content">
+        <div class="terms-section">
+            <h2>1. Introduction</h2>
+            <p>Welcome to Roshan Damor's personal portfolio. By accessing or using this website, you agree to be bound by these User Terms and Privacy Policy. If you disagree with any part of these terms, you may not access the website.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>2. Intellectual Property Rights</h2>
+            <p>The content, features, projects, and functionality of this portfolio are owned by Roshan Damor and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws. You may view and reference the code and projects for educational purposes, but you may not claim them as your own or use them for commercial purposes without explicit permission.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>3. Privacy Policy & Data Collection</h2>
+            <p>Your privacy is important to me. This website is a personal portfolio and does not actively track users for advertising purposes. However, please note the following:</p>
+            <ul>
+                <li><strong>Contact Form:</strong> When you use the contact form, the information you provide (name, email, message) is securely processed and sent to my personal email address. It is used solely to respond to your inquiry and is not shared with third parties.</li>
+                <li><strong>Analytics:</strong> Basic, anonymized analytical data may be collected to understand website traffic and improve user experience. No personally identifiable information (PII) is stored.</li>
+                <li><strong>Cookies:</strong> This site uses minimal cookies strictly necessary for core functionality (like remembering theme preferences if applicable).</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2>4. Third-Party Links</h2>
+            <p>My portfolio contains links to third-party web sites or services that are not owned or controlled by me (such as GitHub, LinkedIn, or external project deployments). I have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party websites or services.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>5. Disclaimer of Warranties</h2>
+            <p>The code, projects, and information on this site are provided on an "AS IS" and "AS AVAILABLE" basis. While I strive for excellence, I make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, or suitability of the information contained on the website for any purpose.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>6. Changes to These Terms</h2>
+            <p>I reserve the right, at my sole discretion, to modify or replace these Terms at any time. Any changes will be updated on this page with an amended "Last updated" date.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>7. Contact Information</h2>
+            <p>If you have any questions about these Terms, please contact me through the <a href="{% url 'home' %}#contact" class="terms-link">Contact Form</a> or email me directly at contact@roshandamor.site.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .terms-content {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        border-radius: 20px;
+        padding: 40px;
+        margin-top: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .terms-section {
+        margin-bottom: 35px;
+    }
+
+    .terms-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .terms-section h2 {
+        color: #667eea;
+        font-family: var(--main-font);
+        font-size: 24px;
+        margin-bottom: 15px;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+    }
+
+    .terms-section p {
+        color: var(--main-text-color);
+        font-family: var(--secondary-font);
+        font-size: 16px;
+        line-height: 1.8;
+        margin-bottom: 15px;
+    }
+
+    .terms-section ul {
+        list-style-type: none;
+        padding-left: 0;
+        margin-bottom: 15px;
+    }
+
+    .terms-section ul li {
+        color: var(--main-text-color);
+        font-family: var(--secondary-font);
+        font-size: 16px;
+        line-height: 1.8;
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 25px;
+    }
+
+    .terms-section ul li::before {
+        content: '→';
+        color: #667eea;
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-weight: bold;
+    }
+
+    .terms-section strong {
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    .terms-link {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid transparent;
+    }
+
+    .terms-link:hover {
+        color: #764ba2;
+        border-bottom-color: #764ba2;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .terms-content {
+            padding: 25px;
+        }
+
+        .terms-section h2 {
+            font-size: 20px;
+        }
+
+        .terms-section p, 
+        .terms-section ul li {
+            font-size: 15px;
+        }
+    }
+</style>
+{% endblock %}

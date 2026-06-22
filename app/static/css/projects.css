@@ -5,7 +5,7 @@
     color: var(--main-text-color);
     padding: 25px;
     border: 2px solid var(--main-outline-color);
-    background-color: rgb(25, 25, 25);
+    background: linear-gradient(135deg, #040914 0%, #041415 100%);
 }
 
 .project-card:hover {
@@ -95,14 +95,6 @@
     color: var(--secondary-text-color);
 }
 
-.project-content .skills span {
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: var(--secondary-text-color);
-    color: var(--main-text-color);
-    font-family: var(--secondary-font);
-    font-size: 12px;
-}
 
 .project-links {
     display: flex;

@@ -9,17 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Quicksand:wght@300..700&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{% static 'images/icons/favicon.ico' %}">
     
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/re-used.css' %}">
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/projects.css' %}">
-    <link rel="stylesheet" href="{% static 'css/blogs.css' %}">
-    <link rel="stylesheet" href="{% static 'css/experiences.css' %}">
-    <link rel="stylesheet" href="{% static 'css/skills.css' %}">
-    <link rel="stylesheet" href="{% static 'css/blogs-detail.css' %}">
-    <link rel="stylesheet" href="{% static 'css/project-detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/re-used.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/projects.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/blogs.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/experiences.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/skills.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/blogs-detail.css' %}?v=1.7">
+    <link rel="stylesheet" href="{% static 'css/project-detail.css' %}?v=1.7">
 
-    {% block title %}Roshan Portfolio |{% endblock %}
+    <title>{% block title %}Roshan Portfolio |{% endblock %}</title>
 </head>
 
 <body>
@@ -104,7 +104,28 @@
         {% endblock %}
 
         <div class="footer">
-            <h1>Thank you for visiting</h1>
+            <h1 id="footer-typing-text"></h1>
+            <script>
+                (function() {
+                    const text = "Thank you for visiting";
+                    const el = document.getElementById("footer-typing-text");
+                    let i = 0;
+                    function typeWriter() {
+                        if (i < text.length) {
+                            el.innerHTML += text.charAt(i);
+                            i++;
+                            setTimeout(typeWriter, 120);
+                        } else {
+                            setTimeout(function() {
+                                el.innerHTML = "";
+                                i = 0;
+                                typeWriter();
+                            }, 3000);
+                        }
+                    }
+                    setTimeout(typeWriter, 500);
+                })();
+            </script>
             <div class="footer-nav">
                 <div class="navigaiton-items">
                     <div class="foot-nav-head">
@@ -199,7 +220,10 @@
             <div class="popup-body">
                 {% if resume and resume.file %}
                     <div class="iframe-container">
-                        <iframe src="https://docs.google.com/gview?url={{ resume.file.url }}&embedded=true" width="100%" height="100%"></iframe>
+                        <object data="{{ resume.file.url }}" type="application/pdf" width="100%" height="100%">
+                            <embed src="{{ resume.file.url }}" type="application/pdf" width="100%" height="100%" />
+                            <p>Your browser doesn't have a PDF plugin. <a href="{{ resume.file.url }}">Click here to download the PDF</a></p>
+                        </object>
                     </div>
                     
                     <div class="popup-actions">
@@ -427,12 +451,15 @@
             background: #f8f9fa;
         }
 
-        .iframe-container iframe {
+        .iframe-container iframe,
+        .iframe-container object,
+        .iframe-container embed {
             width: 100%;
             height: 100%;
             border: none;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: block;
         }
 
         /* Popup Actions */

@@ -101,7 +101,7 @@
 .faq-card {
     width: 100%;
     border: 2px solid var(--main-outline-color);
-    background-color: rgb(25, 25, 25);
+    background: linear-gradient(135deg, #040914 0%, #041415 100%);
     border-radius: 20px;
     padding: 25px;
     transition: all 0.3s ease;

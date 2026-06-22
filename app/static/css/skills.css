@@ -7,7 +7,7 @@
     color: var(--main-text-color);
     padding: 25px;
     border: 2px solid var(--main-outline-color);
-    background-color: rgb(25, 25, 25);
+    background: linear-gradient(135deg, #040914 0%, #041415 100%);
 }
 
 .skills-card:hover {
@@ -202,3 +202,23 @@
     transition: width 1s ease-in-out;
 }
 
+
+/* Skill Status Badges */
+.top-content .progress-card span.status-expert {
+    background: linear-gradient(135deg, #11998e, #38ef7d); /* Green */
+    color: white !important;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(56, 239, 125, 0.2);
+}
+.top-content .progress-card span.status-learning {
+    background: linear-gradient(135deg, #4facfe, #00f2fe); /* Blue */
+    color: white !important;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(79, 172, 254, 0.2);
+}
+.top-content .progress-card span.status-average {
+    background: linear-gradient(135deg, #f6d365, #fda085); /* Orange/Yellow */
+    color: white !important;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(246, 211, 101, 0.2);
+}

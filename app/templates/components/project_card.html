@@ -1,0 +1,37 @@
+{% load static %}
+<div class="project-card">
+    <div class="project-image">
+        {% if project.images.all %}
+            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
+        {% else %}
+            <img src="{% static 'images/others/Project Image1.jpg' %}" alt="Default Image"> <!-- Fallback -->
+        {% endif %}                       
+    </div>
+    <div class="project-content">
+        <h2 class="card-title">{{ project.title }}</h2>
+        <p class="card-desc">{{ project.description }}</p>
+
+        <div class="skills">
+            <p>Skills Used:</p>
+            {% for skill in project.skills.all %}
+                <span class="badge-outline">{{ skill.name }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="project-links">
+            <a href="{% url 'project_detail' slug=project.slug %}">
+                <button class="outline-btn">VIEW DETAILS</button>
+            </a>
+            {% if project.github_link %}
+                <a href="{{ project.github_link }}" target="_blank">
+                    <button class="outline-btn">GitHub Link</button>
+                </a>
+            {% endif %}
+            {% if project.live_link %}
+                <a href="{{ project.live_link }}" target="_blank">
+                    <button class="outline-btn">Live Link</button>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>

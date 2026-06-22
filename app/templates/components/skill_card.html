@@ -1,0 +1,42 @@
+{% load static %}
+<div class="skills-card">
+    <div class="top-content">
+        <div class="skill-content">
+            <div class="skill-image">
+                {% if skill.icon %}
+                    <img src="{{ skill.icon.url }}" alt="{{ skill.name }}">
+                {% else %}
+                    <img src="{% static 'images/icons/default.jpg' %}" alt="Default Icon">
+                {% endif %}
+            </div>
+            <h3 class="card-title">{{ skill.name }}</h3>
+        </div>
+
+        <div class="progress-card">
+            <span class="progress-tag2 status-{{ skill.status|lower }}">
+                {{ skill.status }}
+            </span>
+        </div>
+    </div>
+
+    <div class="skills-content">
+        <div class="progress-container" data-progress="{{ skill.level }}">
+            <div class="progress"></div>
+        </div>
+        <p class="card-desc">{{ skill.description }}</p>
+
+        <div class="skills-links">
+            {% if skill.certificate %}
+                <button class="outline-btn" onclick="showSkillPopup('certificate-modal-{{ skill.id }}')">
+                    View Certificate
+                </button>
+            {% endif %}
+
+            {% if skill.resource_links %}
+                <button class="outline-btn" onclick="showSkillPopup('resource-modal-{{ skill.id }}')">
+                    Used Resources
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</div>

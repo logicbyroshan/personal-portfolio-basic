@@ -31,51 +31,11 @@
         <div class="all-container">
             <div class="cards-header">
                 <h1>my skills.</h1>
-                <p>Visit all my projects an see the code too also view embedded preview aswell.</p>
+                <p>Visit all my projects and see the code too; also view embedded previews as well.</p>
             </div>
             <div class="ver-cards">
                 {% for skill in skills %}
-                    <div class="skills-card">
-                        <div class="top-content">
-                            <div class="skill-content">
-                                <div class="skill-image">
-                                    {% if skill.icon %}
-                                        <img src="{{ skill.icon.url }}" alt="{{ skill.name }}">
-                                    {% else %}
-                                        <img src="{% static 'images/icons/default.jpg' %}" alt="Default Icon">
-                                    {% endif %}
-                                </div>
-                                <h3>{{ skill.name }}</h3>
-                            </div>
-        
-                            <div class="progress-card">
-                                <span class="progress-tag2">
-                                    {{ skill.status }}
-                                </span>
-                            </div>
-                        </div>
-        
-                        <div class="skills-content">
-                            <div class="progress-container" data-progress="{{ skill.level }}">
-                                <div class="progress"></div>
-                            </div>
-                            <p>{{ skill.description }}</p>
-        
-                            <div class="skills-links">
-                                {% if skill.certificate %}
-                                    <button class="outline-btn" onclick="showSkillPopup('certificate-modal-{{ skill.id }}')">
-                                        View Certificate
-                                    </button>
-                                {% endif %}
-        
-                                {% if skill.resource_links %}
-                                    <button class="outline-btn" onclick="showSkillPopup('resource-modal-{{ skill.id }}')">
-                                        Used Resources
-                                    </button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+                {% include "components/skill_card.html" with skill=skill %}
                 {% empty %}
                     <p>No Skills Found</p>
                 {% endfor %}
@@ -90,47 +50,11 @@
         <div class="all-container">
             <div class="cards-header">
                 <h1>my projects.</h1>
-                <p>Visit all my projects an see the code too also view embedded preview aswell.</p>
+                <p>Visit all my projects and see the code too; also view embedded previews as well.</p>
             </div>
             <div class="ver-cards">
                 {% for project in projects %}
-                <div class="project-card">
-                    <div class="project-image">
-                        {% if project.images.all %}
-                            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
-                        {% else %}
-                            <img src="{% static 'images/others/Project Image1.jpg' %}" alt="Default Image"> <!-- Fallback -->
-                        {% endif %}                       
-                    </div>
-                    <div class="project-content">
-                        <h2>{{ project.title }}</h2>
-                        <p>{{ project.description }}</p>
-            
-                        <div class="skills">
-                            <p>Skills Used:</p>
-                            {% for skill in project.skills.all %}
-                                <span>{{ skill.name }}</span>
-                            {% endfor %}
-                        </div>
-            
-                        <div class="project-links">
-                            <a href="{% url 'project_detail' slug=project.slug %}">
-                                <button class="outline-btn">VIEW DETAILS</button>
-                            </a>
-                            {% if project.github_link %}
-                                <a href="{{ project.github_link }}" target="_blank">
-                                    <button class="outline-btn">GitHub Link</button>
-                                </a>
-                            {% endif %}
-
-                            {% if project.live_link %}
-                                <a href="{{ project.live_link }}" target="_blank">
-                                    <button class="outline-btn">Live Link</button>
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+                {% include "components/project_card.html" with project=project %}
                 {% empty %}
                 <p>No Projects Found</p>
                 {% endfor %}
@@ -146,26 +70,12 @@
         <div class="all-container">
             <div class="cards-header">
                 <h1>my experience.</h1>
-                <p>Visit all my projects an see the code too also view embedded preview aswell.</p>
+                <p>Visit all my projects and see the code too; also view embedded previews as well.</p>
             </div>
         
             <div class="hor-cards">
                 {% for experience in experiences %}
-                <div class="exp-card">
-                    <div class="top-content">
-                        <div class="exp-image">
-                            <img src="{{ experience.image.url }}" alt="{{ experience.title }}">
-                        </div>
-                        <h2>{{ experience.title }}</h2>
-                        <div class="date">
-                            <p>{{ experience.start_date|date:"M-Y" }}</p>
-                            <p>{{ experience.end_date|date:"M-Y" }}</p>
-                        </div>
-                    </div>
-                    <div class="exp-content">
-                        <p>{{ experience.description }}</p>
-                    </div>
-                </div>
+                {% include "components/experience_card.html" with experience=experience %}
                 {% empty %}
                 <p>No Experience Found</p>
                 {% endfor %}
@@ -181,35 +91,12 @@
         <div class="all-container">
             <div class="cards-header">
                 <h1>my blogs.</h1>
-                <p>Visit all my projects an see the code too also view embedded preview aswell.</p>
+                <p>Visit all my projects and see the code too; also view embedded previews as well.</p>
             </div>
         
             <div class="ver-cards">
                 {% for blog in blogs %}
-                <div class="blogs-card">
-                    <div class="blogs-image">
-                        <img src="{{ blog.image.url}}" alt="">
-                    </div>
-                    <div class="blogs-content">
-                        <div class="date">
-                            <img src="{% static 'images/icons/calendar.png' %}" alt="">
-                            <p>{{ blog.publication_date|date:"F d, Y" }}</p>
-                            <p>. Read Time: {{ blog.time_to_read }} min</p>
-                        </div>
-                        <h2>{{ blog.title }}</h2>
-                        <div class="skills">
-                            <p>Category : </p>
-                            {% for category in blog.get_category_list %}
-                                <span>{{ category }}</span>
-                            {% endfor %}
-                        </div>
-                        <div class="blogs-links">
-                            <a href="{% url 'blog_detail' slug=blog.slug %}">
-                                <button class="outline-btn">Read More</button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                {% include "components/blog_card.html" with blog=blog %}
                 {% empty %}
                 <p>No Blogs Found</p>
                 {% endfor %}
@@ -224,25 +111,13 @@
         <div class="all-container">
             <div class="cards-header">
                 <h1>my faq's.</h1>
-                <p>Visit all my projects and see the code too; also view embedded preview as well.</p>
+                <p>Visit all my projects and see the code too; also view embedded previews as well.</p>
                 
             </div>
         
             <div class="hor-cards">
                 {% for faq in faqs %}
-                <div class="faq-card" data-category="{{ faq.category }}">
-                    <div class="faq-content">
-                        <h2>{{ faq.question }}</h2>
-                        <p class="answer">{{ faq.answer }}</p>
-                    </div>
-                    <div class="btn-faq">
-                        <img class="faq-toggle" 
-                                src="{% static 'images/icons/open.png' %}" 
-                                alt="Show FAQ" 
-                                data-open-icon="{% static 'images/icons/close.png' %}" 
-                                data-closed-icon="{% static 'images/icons/open.png' %}">
-                    </div>
-                </div>
+                {% include "components/faq_card.html" with faq=faq %}
                 {% empty %}
                 <p>No FAQ's Found</p>
                 {% endfor %}
@@ -253,342 +128,5 @@
             </div>
         </div>
 
-        <!-- Modern Skill Popups -->
-        {% for skill in skills %}
-            {% if skill.certificate %}
-                <!-- Certificate Popup -->
-                <div id="certificate-modal-{{ skill.id }}" class="skill-popup-overlay">
-                    <div class="skill-popup-content">
-                        <div class="skill-popup-header">
-                            <h3>{{ skill.name }} - Certificate</h3>
-                            <span class="skill-close-btn" onclick="closeSkillPopup('certificate-modal-{{ skill.id }}')" title="Close">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </span>
-                        </div>
-                        
-                        <div class="skill-popup-body">
-                            <div class="skill-iframe-container">
-                                <iframe src="{{ skill.certificate.url }}" width="100%" height="100%"></iframe>
-                            </div>
-                            
-                            <div class="skill-popup-actions">
-                                <a href="{{ skill.certificate.url }}" download class="download-link">
-                                    <button class="skill-download-btn">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                        Download Certificate
-                                    </button>
-                                </a>
-                                <button class="skill-cancel-btn" onclick="closeSkillPopup('certificate-modal-{{ skill.id }}')">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-
-            {% if skill.resource_links %}
-                <!-- Resource Popup -->
-                <div id="resource-modal-{{ skill.id }}" class="skill-popup-overlay">
-                    <div class="skill-popup-content">
-                        <div class="skill-popup-header">
-                            <h3>{{ skill.name }} - Resources</h3>
-                            <span class="skill-close-btn" onclick="closeSkillPopup('resource-modal-{{ skill.id }}')" title="Close">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </span>
-                        </div>
-                        
-                        <div class="skill-popup-body">
-                            <div class="resources-container">
-                                {% for resource in skill.get_resource_list %}
-                                    <div class="resource-item">
-                                        {% if "youtube.com/watch?v=" in resource %}
-                                            <iframe width="100%" height="315" 
-                                                    src="{{ resource|cut:'watch?v='|add:'embed/' }}" 
-                                                    frameborder="0" allowfullscreen>
-                                            </iframe>
-                                        {% elif "youtu.be/" in resource %}
-                                            <iframe width="100%" height="315" 
-                                                    src="https://www.youtube.com/embed/{{ resource|slice:'17:' }}" 
-                                                    frameborder="0" allowfullscreen>
-                                            </iframe>
-                                        {% else %}
-                                            <a href="{{ resource }}" target="_blank" class="resource-link">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                                {{ resource }}
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            
-                            <div class="skill-popup-actions">
-                                <button class="skill-cancel-btn" onclick="closeSkillPopup('resource-modal-{{ skill.id }}')">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-
-        <!-- Contact Section Starts Here -->
-        <div class="all-container" id="contact">
-            <div class="cards-header">
-                <h1>contact me.</h1>
-                <p>Visit all my projects and see the code too; also view embedded previews as well.</p>
-            </div>
-            
-            <div class="mail-contact-card">
-                <!-- Left Contact Information -->
-                <div class="left-contact">
-                    <img src="{% static 'images/stock/Contact.jpg' %}" alt="Contact Image">
-                    <div class="contact-section">
-                        <div class="contact">
-                            <img src="{% static 'images/icons/g-mail.png' %}" alt="Email Icon">
-                            <a href="mailto:iamroshandamor@gmail.com"><p>iamroshandamor@gmail.com</p></a>
-                        </div>
-                        <div class="contact">
-                            <img src="{% static 'images/icons/rmail.png' %}" alt="Email Icon">
-                            <a href="mailto:contact@roshandamor.site"><p>contact@roshandamor.site</p></a>
-                        </div>
-                        <div class="contact">
-                            <img src="{% static 'images/icons/phone.png' %}" alt="Phone Icon">
-                            <a href="tel:+91XXXXXXXXXX"><p>+91 1234567890</p></a>
-                        </div>
-                        <div class="contact">
-                            <img src="{% static 'images/icons/address.png' %}" alt="Address Icon">
-                            <a href="https://www.google.com/maps/search/?api=1&query=Patanjali+Parisar,+Abbas+Nagar,+Gandhinagar,+Bhopal,+MP">
-                                <p>Indore, Madhya Pradesh, India</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Contact Form -->
-                <div class="right-contact">
-                    <div class="contact-form-card">
-                        <!-- Contact Form -->
-                        <form id="contactForm" method="post" action="{% url 'home' %}">
-                            {% csrf_token %}
-                
-                            <!-- Name Field -->
-                            <input type="text" name="name" id="id_name" placeholder="Enter your name" required>
-                
-                            <!-- Email Field -->
-                            <input type="email" name="email" id="id_email" placeholder="Enter your email" required>
-                
-                            <!-- Subject Field -->
-                            <input type="text" name="subject" id="id_subject" placeholder="Enter the subject" required>
-                
-                            <!-- Message Field -->
-                            <textarea name="message" id="id_message" placeholder="Your message here" rows="8" required></textarea>
-                
-                            <!-- Submit Button -->
-                            <button class="contact-btn" type="submit">Send Message</button>
-                
-                            <!-- Success/Error Messages -->
-                            <div id="formMessage" class="message-container"></div>
-                        </form>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        <!-- Contact Section Ends Here -->
-
-
-<!-- CSS for Skill Popups -->
-<style>
-    /* Skill Popup Styles */
-    .skill-popup-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-        z-index: 10000;
-        justify-content: center;
-        align-items: center;
-        animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .skill-popup-overlay.show {
-        display: flex;
-    }
-
-    .skill-popup-content {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 20px;
-        padding: 30px;
-        max-width: 90%;
-        max-height: 90%;
-        width: 600px;
-        position: relative;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        transform: translateY(0);
-        animation: slideUp 0.4s ease-out;
-        overflow: auto;
-    }
-
-    .skill-popup-content h3 {
-        color: #ffffff;
-        margin: 0 0 20px 0;
-        font-size: 24px;
-        text-align: center;
-        font-weight: 600;
-    }
-
-    .skill-popup-content iframe {
-        width: 100%;
-        height: 500px;
-        border: none;
-        border-radius: 10px;
-        background: #ffffff;
-    }
-
-    .skill-popup-content p {
-        color: #ffffff;
-        line-height: 1.6;
-        margin: 15px 0;
-        text-align: center;
-        font-size: 16px;
-    }
-
-    .skill-close-btn {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        color: #ffffff;
-        font-size: 24px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        font-weight: bold;
-        line-height: 1;
-    }
-
-    .skill-close-btn:hover {
-        background: rgba(255, 255, 255, 0.3);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: rotate(90deg);
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-        from { 
-            opacity: 0; 
-            transform: translateY(50px) scale(0.9); 
-        }
-        to { 
-            opacity: 1; 
-            transform: translateY(0) scale(1); 
-        }
-    }
-
-    /* Body class when skill popup is open */
-    body.skill-popup-open {
-        overflow: hidden;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .skill-popup-content {
-            width: 95%;
-            padding: 20px;
-            margin: 20px;
-        }
-        
-        .skill-popup-content h3 {
-            font-size: 20px;
-        }
-        
-        .skill-popup-content iframe {
-            height: 400px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .skill-popup-content {
-            padding: 15px;
-        }
-        
-        .skill-popup-content iframe {
-            height: 300px;
-        }
-    }
-</style>
-
-<!-- JavaScript for Skill Popups -->
-<script>
-    function showSkillPopup(id) {
-        console.log("Opening skill popup:", id);
-        
-        const popup = document.getElementById(id);
-        const body = document.body;
-        
-        if (!popup) {
-            console.error("Skill popup element not found:", id);
-            return;
-        }
-        
-        popup.style.display = "flex";
-        body.classList.add("skill-popup-open");
-        
-        console.log("Skill popup opened successfully");
-    }
-
-    function closeSkillPopup(id) {
-        console.log("Closing skill popup:", id);
-        
-        const popup = document.getElementById(id);
-        const body = document.body;
-        
-        if (popup) {
-            popup.style.display = "none";
-            body.classList.remove("skill-popup-open");
-        }
-        
-        console.log("Skill popup closed successfully");
-    }
-
-    // Close popup when clicking outside or pressing Escape
-    document.addEventListener('DOMContentLoaded', function() {
-        // Handle click outside to close
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('skill-popup-overlay')) {
-                const popupId = e.target.id;
-                closeSkillPopup(popupId);
-            }
-        });
-
-        // Close popup with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const openPopups = document.querySelectorAll('.skill-popup-overlay[style*="flex"]');
-                openPopups.forEach(popup => {
-                    closeSkillPopup(popup.id);
-                });
-            }
-        });
-    });
-</script>
+        {% include "components/skill_popups.html" %}
 {% endblock %}

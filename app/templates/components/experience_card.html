@@ -1,0 +1,19 @@
+<div class="exp-card">
+    <div class="top-content">
+        <div class="exp-image">
+            <img src="{{ experience.image.url }}" alt="{{ experience.title }}">
+        </div>
+        <h2 class="card-title">{{ experience.title }}</h2>
+        <div class="date">
+            <span class="badge">{{ experience.start_date|date:"M-Y" }}</span>
+            {% if experience.end_date %}
+                <span class="badge">{{ experience.end_date|date:"M-Y" }}</span>
+            {% else %}
+                <span class="badge">Present</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="exp-content">
+        <p class="card-desc">{{ experience.description }}</p>
+    </div>
+</div>
