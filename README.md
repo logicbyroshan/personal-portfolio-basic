@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌟 Portfolio Website v1.0
+# 🌟 Roshan's Desk - Modern Personal Portfolio
 
 <img src="stock-images/Portfolio Thumb.jpg" alt="Portfolio Cover" width="600" style="border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
 
@@ -39,20 +39,20 @@
 ## ✨ Features
 
 ### 🎨 **Frontend Features**
-- **Fully Responsive Design** - Mobile-first approach with modern UI/UX
-- **Interactive Animations** - Smooth transitions and hover effects
-- **Modern Glassmorphism UI** - Contemporary design with depth and blur effects
-- **Mobile Navigation** - Hamburger menu with overlay system
-- **Dynamic Content** - Real-time content updates without page refresh
-- **Touch Optimized** - Enhanced touch interactions for mobile devices
+- **Premium Dark Mode Aesthetic** - Stunning dark blue/green linear gradients for a futuristic, deep-UI feel
+- **Custom 1280px Grid System** - Mathematically perfect alignment across all pages (Terms, Projects, Blogs)
+- **Advanced UI Interactions** - Dynamic JavaScript typewriter effects and custom blinking cursors
+- **Flawless Sticky Navbar** - Seamless scrolling with `overflow-x: clip` to prevent layout breakage
+- **Interactive Animations** - Smooth transitions, hover effects, and modern Glassmorphism UI
+- **Fully Responsive Design** - Mobile-first approach with customized hamburger overlay menus
 
 ### 🔧 **Backend Features**
-- **Django 5.2.5 Framework** - Latest Django with enhanced security
+- **Django 5.2.5 Framework** - Latest Django with enhanced security and performance
+- **Custom Jazzmin Admin Dashboard** - A completely customized, dark-mode themed CMS for managing all portfolio content natively
 - **MySQL Database** - Robust relational database management
-- **Admin Dashboard** - Comprehensive content management system
-- **REST API** - Django REST Framework integration
-- **Email Integration** - Contact form with SMTP functionality
-- **File Upload System** - Resume, images, and document management
+- **REST API Integration** - Django REST Framework backend architecture
+- **Dynamic File System** - Secure upload management for Resumes, Blog Covers, and Project features
+- **Email Integration** - Contact form with console/SMTP functionality
 
 ### 🛡️ **Security Features**
 - **Environment Variables** - Secure credential management with python-dotenv
@@ -232,6 +232,7 @@ portfolio-v1.0/
 │   ├── 📁 static/                  # Static files (CSS, JS, Images)
 │   │   ├── 📁 css/
 │   │   │   ├── style.css           # Main stylesheet
+│   │   │   ├── admin_custom.css    # Jazzmin Dark Mode UI Overrides
 │   │   │   ├── index.css           # Homepage styles
 │   │   │   ├── blogs.css           # Blog-specific styles
 │   │   │   └── ...
@@ -331,10 +332,11 @@ CSRF_COOKIE_SECURE=True
 - **ContactMessage:** Contact form submissions storage
 
 #### **Admin Interface**
-Access at `/admin/` with superuser credentials:
-- Content management for all models
-- Rich text editor for blog posts
-- File upload management
+Access at `/dash-admin/` with superuser credentials:
+- **Jazzmin Powered:** Completely customized dark-mode CMS tailored to the portfolio's aesthetics
+- Content management for all models seamlessly mapped to the UI
+- Rich text editor embedded for blog posts
+- Centralized file upload management for resumes and visual assets
 - User and permission management
 
 ---
