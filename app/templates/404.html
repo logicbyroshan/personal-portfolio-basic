@@ -1,0 +1,11 @@
+{% extends "portfolio-base.html" %}
+{% load static %}
+{% block title %}404 - Page Not Found{% endblock %}
+{% block content %}
+<div class="all-container" style="text-align: center; margin-top: 100px; min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <h1 style="font-family: var(--heading-font); font-size: 120px; color: var(--text-hover-color); margin-bottom: 10px; letter-spacing: 5px;">404</h1>
+    <h2 style="font-family: var(--main-font); font-size: 36px; color: var(--heading-text-color); margin-bottom: 15px;">Oops! Page Not Found.</h2>
+    <p style="font-family: var(--secondary-font); color: var(--secondary-text-color); margin-bottom: 30px; font-size: 18px; max-width: 600px;">The digital path you're looking for seems to have vanished into the void. Let's get you back on track.</p>
+    <a href="{% url 'home' %}"><button class="outline-btn" style="padding: 15px 30px; font-size: 18px;">Return to Home</button></a>
+</div>
+{% endblock %}

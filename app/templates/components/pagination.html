@@ -1,15 +1,35 @@
 {% if page_obj.has_other_pages %}
-<div class="pagination">
-    {% if page_obj.has_previous %}
-        <a href="?page=1{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" class="page-link">&laquo; First</a>
-        <a href="?page={{ page_obj.previous_page_number }}{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" class="page-link">Previous</a>
-    {% endif %}
+<div class="cards-filter pagination-header" style="justify-content: space-between; margin-top: 40px; display: flex; width: 100%; border-top: solid 2px var(--main-outline-color); padding-top: 20px;">
+    
+    <div class="cards-sort" style="display: flex; gap: 10px;">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"><button class="outline-btn">&laquo; First</button></a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"><button class="outline-btn">Previous</button></a>
+        {% else %}
+            <button class="outline-btn" style="opacity: 0.5; cursor: not-allowed;" disabled>&laquo; First</button>
+            <button class="outline-btn" style="opacity: 0.5; cursor: not-allowed;" disabled>Previous</button>
+        {% endif %}
+    </div>
 
-    <span class="current-page">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <div class="pagination-numbers" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; flex: 1; margin: 0 15px;">
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <button class="outline-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: transparent;">{{ num }}</button>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"><button class="outline-btn">{{ num }}</button></a>
+            {% endif %}
+        {% endfor %}
+    </div>
 
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" class="page-link">Next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" class="page-link">Last &raquo;</a>
-    {% endif %}
+    <div class="cards-sort" style="display: flex; gap: 10px;">
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"><button class="outline-btn">Next</button></a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&search={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"><button class="outline-btn">Last &raquo;</button></a>
+        {% else %}
+            <button class="outline-btn" style="opacity: 0.5; cursor: not-allowed;" disabled>Next</button>
+            <button class="outline-btn" style="opacity: 0.5; cursor: not-allowed;" disabled>Last &raquo;</button>
+        {% endif %}
+    </div>
+
 </div>
 {% endif %}

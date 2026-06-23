@@ -1,0 +1,11 @@
+{% extends "portfolio-base.html" %}
+{% load static %}
+{% block title %}500 - Server Error{% endblock %}
+{% block content %}
+<div class="all-container" style="text-align: center; margin-top: 100px; min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <h1 style="font-family: var(--heading-font); font-size: 120px; color: #ff4757; margin-bottom: 10px; letter-spacing: 5px;">500</h1>
+    <h2 style="font-family: var(--main-font); font-size: 36px; color: var(--heading-text-color); margin-bottom: 15px;">Server Error</h2>
+    <p style="font-family: var(--secondary-font); color: var(--secondary-text-color); margin-bottom: 30px; font-size: 18px; max-width: 600px;">Oops! Our servers encountered an unexpected glitch. We are already looking into it. Please try again later.</p>
+    <a href="{% url 'home' %}"><button class="outline-btn" style="padding: 15px 30px; font-size: 18px;">Return to Home</button></a>
+</div>
+{% endblock %}
