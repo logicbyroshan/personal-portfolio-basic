@@ -321,7 +321,7 @@
     border-radius: 20px;
     padding: 20px;
     color: var(--main-text-color);
-    background-color: var(--main-outline-color);
+    background: linear-gradient(135deg, #040914 0%, #041415 100%);
 }
 
 /* Stack form elements vertically */

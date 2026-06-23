@@ -106,10 +106,10 @@ if PRODUCTION and os.getenv('DB_NAME'):
                 },
             }
         }
-        print("✅ Using MySQL database for production")
+        print(" Using MySQL database for production")
     except Exception as e:
-        print(f"❌ MySQL configuration error: {e}")
-        print("🔄 Falling back to SQLite database")
+        print(f" MySQL configuration error: {e}")
+        print(" Falling back to SQLite database")
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
@@ -125,7 +125,7 @@ else:
         }
     }
     if not PRODUCTION:
-        print("🔧 Using SQLite database for development")
+        print("Using SQLite database for development")
 
 
 # Password validation
@@ -171,7 +171,7 @@ if PRODUCTION:
     # Use WhiteNoise for static file serving in production
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     STATICFILES_DIRS = []
-    print("📦 Production static files configuration loaded")
+    print(" Production static files configuration loaded")
 else:
     # Development static files configuration
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -180,7 +180,7 @@ else:
     ]
     # Use default static files storage for development
     # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-    print("🔧 Development static files configuration loaded")
+    print("Development static files configuration loaded")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -202,7 +202,7 @@ if PRODUCTION and os.getenv('EMAIL_HOST'):
     EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
     DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
-    print("📧 Production email configuration loaded")
+    print(" Production email configuration loaded")
 else:
     # Development email configuration (console backend for testing)
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -212,7 +212,7 @@ else:
     EMAIL_HOST_USER = ''
     EMAIL_HOST_PASSWORD = ''
     DEFAULT_FROM_EMAIL = 'noreply@localhost'
-    print("🔧 Development email configuration loaded (console backend)")
+    print("Development email configuration loaded (console backend)")
 
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -259,7 +259,7 @@ if PRODUCTION:
     # Admin URL Security (optional)
     ADMIN_URL = os.getenv('ADMIN_URL', 'admin/')
     
-    print("🔒 Production security settings enabled")
+    print(" Production security settings enabled")
 else:
     # Development Security Settings (more relaxed)
     SECURE_SSL_REDIRECT = False
@@ -267,7 +267,7 @@ else:
     CSRF_COOKIE_SECURE = False
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REFERRER_POLICY = 'same-origin'
-    print("🔧 Development security settings (relaxed for local development)")
+    print(" Development security settings (relaxed for local development)")
 
 # Django Jazzmin Settings (Admin Panel UI)
 JAZZMIN_SETTINGS = {
@@ -366,7 +366,7 @@ if PRODUCTION:
             },
         },
     }
-    print("📝 Production logging configured (file-based)")
+    print(" Production logging configured (file-based)")
 else:
     # Development logging to console
     LOGGING = {
@@ -388,16 +388,16 @@ else:
             },
         },
     }
-    print("🔧 Development logging configured (console-based)")
+    print(" Development logging configured (console-based)")
 
 # Environment Summary
 print("\n" + "="*50)
-print("🚀 DJANGO PORTFOLIO CONFIGURATION")
+print(" DJANGO PORTFOLIO CONFIGURATION")
 print("="*50)
-print(f"🎯 Environment: {'Production' if PRODUCTION else 'Development'}")
-print(f"🐛 Debug Mode: {'ON' if DEBUG else 'OFF'}")
-print(f"💾 Database: {'MySQL' if PRODUCTION and os.getenv('DB_NAME') else 'SQLite'}")
-print(f"📧 Email Backend: {'SMTP' if PRODUCTION and os.getenv('EMAIL_HOST') else 'Console'}")
-print(f"📦 Static Files: {'Compressed (WhiteNoise)' if PRODUCTION else 'Development'}")
-print(f"🔒 Security: {'Enhanced' if PRODUCTION else 'Relaxed'}")
+print(f" Environment: {'Production' if PRODUCTION else 'Development'}")
+print(f" Debug Mode: {'ON' if DEBUG else 'OFF'}")
+print(f" Database: {'MySQL' if PRODUCTION and os.getenv('DB_NAME') else 'SQLite'}")
+print(f" Email Backend: {'SMTP' if PRODUCTION and os.getenv('EMAIL_HOST') else 'Console'}")
+print(f" Static Files: {'Compressed (WhiteNoise)' if PRODUCTION else 'Development'}")
+print(f" Security: {'Enhanced' if PRODUCTION else 'Relaxed'}")
 print("="*50 + "\n")
