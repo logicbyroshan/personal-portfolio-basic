@@ -8,8 +8,12 @@
 
 [data-theme="dark"] body, 
 body, 
+body.bg-body-tertiary,
 .content-wrapper, 
 .wrapper,
+.app-main,
+.app-content-header,
+.app-content,
 .main-header, 
 .main-sidebar, 
 .brand-link,
